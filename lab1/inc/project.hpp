@@ -4,8 +4,7 @@
 
 namespace drawer {
 
-void project(const DrawerData &data);
-void project_line(const Line3d &line, Line2d &proj);
-void project_cord(const Cord3d &cord, Cord2d &proj);
+int project(DrawerResult &result, const Model &data);
+void project_cord(Cord2d &proj, const Cord3d &cord);
 
 }  // namespace drawer

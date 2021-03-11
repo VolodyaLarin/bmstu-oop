@@ -6,53 +6,54 @@
 #define SUCCESS 0
 #define ERROR_IO -2
 #define ERROR_FILE -3
-#define ERROR_PTR -3
-#define ERROR_NOT_LOAD -3
+#define ERROR_PTR -4
+#define ERROR_NOT_LOAD -5
+#define ERROR_ALLOC -6
+#define ERROR_UNDEFINED_ACTION -7
 
 struct Cord3d {
   double x;
   double y;
   double z;
 };
-struct Line3d {
-  Cord3d start;
-  Cord3d end;
-};
+typedef Cord3d Angles3d, Translate3d, Scale3d;
 
 struct Cord2d {
   double x;
   double y;
 };
-struct Line2d {
-  Cord2d start;
-  Cord2d end;
+
+struct Line {
+  int start;
+  int end;
 };
+
+typedef Line Line3d, Line2d;
 
 struct DrawerResult {
+  bool loaded;
   Line2d *lines;
-  size_t count;
+  size_t lines_count;
+
+  Cord2d *cords;
+  size_t cords_count;
 };
 
-struct DrawerData {
-  Line3d *lines;
+struct Model {
+  bool loaded;
   Cord3d center;
-  size_t count;
-  DrawerResult result;
+  Cord3d *cords;
+  size_t count_cords;
+  Line3d *lines;
+  size_t count_lines;
 };
 
-enum action_t {
-  load_file,
-  action_translate,
-  action_scale,
-  action_rotate_x,
-  action_rotate_y,
-  action_rotate_z,
-  action_free_content,
-  action_project,
-};
+#include "request.hpp"
+
 
 namespace drawer {
 
-int drawer(int action, ...);
+int drawer(Request &request);
 
 }  // namespace drawer
+

@@ -10,7 +10,9 @@ SRCS = 	src/main.cpp \
 		src/rotate.cpp \
 		src/scale.cpp \
 		src/translate.cpp \
-		src/drawer.cpp
+		src/drawer.cpp \
+		src/model.cpp 
+
 
 HDRS_DIR = inc/
 

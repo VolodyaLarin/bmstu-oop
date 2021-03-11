@@ -6,31 +6,17 @@
 
 namespace drawer {
 
-void rotate_x(DrawerData &data, double angle) {
-  for (size_t i = 0; i < data.count; i++)
-    rotate_x_Line3d(data.lines[i], data.center, angle);
-}
-void rotate_y(DrawerData &data, double angle) {
-  for (size_t i = 0; i < data.count; i++)
-    rotate_y_Line3d(data.lines[i], data.center, angle);
-}
-void rotate_z(DrawerData &data, double angle) {
-  for (size_t i = 0; i < data.count; i++)
-    rotate_z_Line3d(data.lines[i], data.center, angle);
-}
+int rotate_model(Model &data, const Cord3d &angles) {
+  int err = SUCCESS;
+  if (!data.loaded) err = ERROR_NOT_LOAD;
+  if (!err)
+    for (size_t i = 0; i < data.count_cords; i++) {
+      rotate_x_Cord3d(data.cords[i], data.center, angles.x);
+      rotate_y_Cord3d(data.cords[i], data.center, angles.y);
+      rotate_z_Cord3d(data.cords[i], data.center, angles.z);
+    }
 
-void rotate_x_Line3d(Line3d &line, const Cord3d &center, double angle) {
-  rotate_x_Cord3d(line.start, center, angle);
-  rotate_x_Cord3d(line.end, center, angle);
-}
-void rotate_y_Line3d(Line3d &line, const Cord3d &center, double angle) {
-  rotate_y_Cord3d(line.start, center, angle);
-  rotate_y_Cord3d(line.end, center, angle);
-}
-
-void rotate_z_Line3d(Line3d &line, const Cord3d &center, double angle) {
-  rotate_z_Cord3d(line.start, center, angle);
-  rotate_z_Cord3d(line.end, center, angle);
+  return err;
 }
 
 void rotate_x_Cord3d(Cord3d &p, const Cord3d &c, double a) {

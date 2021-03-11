@@ -5,19 +5,21 @@
 
 namespace drawer {
 
-void translate(DrawerData &data, const Cord3d &d) {
-  translate_Cord3d(data.center, d);
-  for (size_t i = 0; i < data.count; i++) translate_Line3d(data.lines[i], d);
+int translate_model(Model &data, const Translate3d &translate) {
+  int err = SUCCESS;
+  if (!data.loaded) err = ERROR_NOT_LOAD;
+  if (!err) translate_Cord3d(data.center, translate);
+  if (!err)
+    for (size_t i = 0; i < data.count_cords; i++)
+      translate_Cord3d(data.cords[i], translate);
+
+  return err;
 }
 
-void translate_Line3d(Line3d &line, const Cord3d &d) {
-  translate_Cord3d(line.start, d);
-  translate_Cord3d(line.end, d);
-}
-void translate_Cord3d(Cord3d &p, const Cord3d &d) {
-  p.x = p.x + d.x;
-  p.y = p.y + d.y;
-  p.z = p.z + d.z;
+void translate_Cord3d(Cord3d &cord, const Translate3d &translate) {
+  cord.x = cord.x + translate.x;
+  cord.y = cord.y + translate.y;
+  cord.z = cord.z + translate.z;
 }
 
 }  // namespace drawer

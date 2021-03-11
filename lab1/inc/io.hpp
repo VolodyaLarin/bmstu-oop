@@ -4,12 +4,12 @@
 
 namespace drawer {
 
-int read(DrawerData &data, const char filename[]);
-int read_Line3d(FILE *file, Line3d &line);
-int read_Cord3d(FILE *file, Cord3d &cord);
+int read_model(Model &data, const ReadModelArgs&);
+int read_Line3d(Line3d &line, FILE *file, size_t cords_count);
+int read_Cord3d(Cord3d &cord, FILE *file);
+int read_size(size_t &size, FILE *file);
 
-
-void free_content(DrawerData &data);
+void free_content(Model &data);
 
 
 }  // namespace drawer
