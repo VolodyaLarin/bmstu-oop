@@ -8,7 +8,7 @@ double tr = 2.;
 double rt = 0.02;
 
 int load_file_fnc(const char file[], const sf::VideoMode vm) {
-  Request request;
+  Request request{};
   request.action = action_read_model;
   request.read_model.filename = file;
 
@@ -177,23 +177,14 @@ int main(int argc, char *argv[]) {
       drawer::drawer(request);
     }
 
-    request.action = action_project;
-    request.project.result = nullptr;
+    window.clear();
+
+    request.action = action_draw;
+    request.draw_args.canvas.window = &window;
+
     int err = drawer::drawer(request);
     if (err) return err;
 
-    window.clear();
-    DrawerResult *result = request.project.result;
-    if (result)
-      for (size_t i = 0; i < result->lines_count; i++) {
-        sf::Vertex line[] = {
-            sf::Vertex(sf::Vector2f(result->cords[result->lines[i].start].x,
-                                    result->cords[result->lines[i].start].y)),
-            sf::Vertex(sf::Vector2f(result->cords[result->lines[i].end].x,
-                                    result->cords[result->lines[i].end].y))};
-
-        window.draw(line, 2, sf::Lines);
-      }
     if (show_help) window.draw(text);
 
     window.display();

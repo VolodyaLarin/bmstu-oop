@@ -9,34 +9,36 @@
 namespace drawer {
 
 int read_model(Model &model, const ReadModelArgs &args) {
-  int err = SUCCESS;
 
-  if (model.loaded) err = ERROR_NOT_LOAD;
+  FILE *file = fopen(args.filename, "r");
+  if (!file) return ERROR_FILE;
 
-  FILE *file = nullptr;
-  if (!err) file = fopen(args.filename, "r");
-  if (!err && !file) err = ERROR_FILE;
+  int err = read_model_from_stream(model, file);
 
-  size_t count_cords = 0, count_lines = 0;
-  if (!err) err = read_size(count_cords, file);
-  if (!err) err = read_size(count_lines, file);
+  fclose(file);
+  return err;
+}
 
-  Model temp_model = {};
-  if (!err) init_model(temp_model, count_cords, count_lines);
+int read_model_from_stream(Model &model, FILE *file) {
+  if (!file) return ERROR_PTR;
 
-  if (!err) err = read_Cord3d(temp_model.center, file);
+  Model temp = init_model();
 
-  for (size_t i = 0; !err && i < temp_model.count_cords; i++)
-    err = read_Cord3d(temp_model.cords[i], file);
+  int err = read_Cord3d(temp.center, file);
+   
 
-  for (size_t i = 0; !err && i < temp_model.count_lines; i++)
-    err = read_Line3d(temp_model.lines[i], file, temp_model.count_cords);
+  if (!err) err = read_Cords(temp.cords, file);
 
-  if (!err)
-    model = temp_model;
-  else
-    free_model(temp_model);
+  size_t cords_count = get_size_cords(temp.cords);
 
+  if (!err) err = read_Lines(temp.lines, file, cords_count);
+
+  if (err) {
+      free_model(temp);
+  } else {
+      free_model(model);
+      model = temp;
+  }
   return err;
 }
 
@@ -56,36 +58,74 @@ int read_size(size_t &size, FILE *file) {
   return err;
 }
 
+int read_Lines(Lines3d &lines, FILE *file, size_t cords_count)
+{
+    size_t size = 0;
+    int err = read_size(size, file);
+    Lines3d temp_lines = {};
+    if (!err) err = init_lines(temp_lines, size);
+
+    for (size_t i = 0; !err && i < size; ++i) {
+        err = read_Line3d(temp_lines.array[i], file, cords_count);
+    }
+
+    if (err) {
+        free_lines(temp_lines);
+    } else {
+        free_lines(lines);
+        lines = temp_lines;
+    }
+
+    return err;
+}
+
+
+int read_Cords(Cords3d &cords, FILE *file)
+{
+    size_t size = 0;
+    int err = read_size(size, file);
+    Cords3d temp_cords = {};
+    if (!err) err = init_cords(temp_cords, size);
+
+    for (size_t i = 0; !err && i < size; ++i)
+        err = read_Cord3d(temp_cords.array[i], file);
+
+    if (err) {
+        free_cords(temp_cords);
+    } else {
+        free_cords(cords);
+        cords = temp_cords;
+    }
+
+    return err;
+}
+
 int read_Line3d(Line3d &line, FILE *file, size_t cords_count) {
-  int err = SUCCESS;
-  if (!file) err = ERROR_PTR;
+    if (!file) return ERROR_PTR;
 
-  long long start = 0, end = 0;
+    long long start = 0, end = 0;
 
-  if (!err && fscanf(file, "%lld%lld", &start, &end) != 2) err = ERROR_IO;
-  if (!err && (start < 0 || (size_t)start >= cords_count)) err = ERROR_IO;
-  if (!err && (end < 0 || (size_t)end >= cords_count)) err = ERROR_IO;
+    if (fscanf(file, "%lld%lld", &start, &end) != 2) return ERROR_IO;
+    if (start < 0 || (size_t)start >= cords_count) return ERROR_IO;
+    if (end < 0 || (size_t)end >= cords_count) return ERROR_IO;
 
-  if (!err) {
     line.start = start;
     line.end = end;
-  }
 
-  return err;
+    return SUCCESS;
 }
 
 int read_Cord3d(Cord3d &cord, FILE *file) {
-  int err = SUCCESS;
-  if (!file) err = ERROR_PTR;
+  if (!file) return ERROR_PTR;
 
   Cord3d temp = {};
 
-  if (!err && fscanf(file, "%lf%lf%lf", &temp.x, &temp.y, &temp.z) != 3)
-    err = ERROR_IO;
+  if (fscanf(file, "%lf%lf%lf", &temp.x, &temp.y, &temp.z) != 3)
+    return ERROR_IO;
 
-  if (!err) cord = temp;
+  cord = temp;
 
-  return err;
+  return SUCCESS;
 }
 
 }  // namespace drawer

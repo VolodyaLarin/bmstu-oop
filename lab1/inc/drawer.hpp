@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DRAWER_HPP_
+#define DRAWER_HPP_
 
 #include <cstddef>
 #include <cstdio>
@@ -24,8 +25,8 @@ struct Cord2d {
 };
 
 struct Line {
-  int start;
-  int end;
+    size_t start;
+    size_t end;
 };
 
 typedef Line Line3d, Line2d;
@@ -39,17 +40,23 @@ struct DrawerResult {
   size_t cords_count;
 };
 
+struct Cords3d {
+    Cord3d *array;
+    size_t count;
+};
+
+struct Lines3d {
+    Line3d *array;
+    size_t count;
+};
+
 struct Model {
-  bool loaded;
   Cord3d center;
-  Cord3d *cords;
-  size_t count_cords;
-  Line3d *lines;
-  size_t count_lines;
+  Cords3d cords;
+  Lines3d lines;
 };
 
 #include "request.hpp"
-
 
 namespace drawer {
 
@@ -57,3 +64,4 @@ int drawer(Request &request);
 
 }  // namespace drawer
 
+#endif

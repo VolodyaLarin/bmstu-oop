@@ -5,14 +5,13 @@
 
 namespace drawer {
 
-int scale_model(Model &data, const Cord3d &k) {
-  int err = SUCCESS;
-  if (!data.loaded) err = ERROR_NOT_LOAD;
-  if (!err)
-    for (size_t i = 0; i < data.count_cords; i++)
-      scale_Cord3d(data.cords[i], data.center, k);
+void scale_cords(Cords3d &cords, const Cord3d &center, const Cord3d &k) {
+    for (size_t i = 0; i < cords.count; i++)
+        scale_Cord3d(cords.array[i], center, k);
+}
 
-  return err;
+void scale_model(Model &data, const Cord3d &k) {
+    scale_cords(data.cords, data.center, k);
 }
 
 void scale_Cord3d(Cord3d &p, const Cord3d &c, const Cord3d &k) {
@@ -20,4 +19,5 @@ void scale_Cord3d(Cord3d &p, const Cord3d &c, const Cord3d &k) {
   p.y = k.y * (p.y - c.y) + c.y;
   p.z = k.z * (p.z - c.z) + c.z;
 }
+
 }  // namespace drawer

@@ -1,8 +1,18 @@
-#pragma once
+#ifndef MODEL_HPP_
+#define MODEL_HPP_
+
 
 #include "drawer.hpp"
 
-int init_model(Model &model, size_t cords_count, size_t lines_count);
+
+Model init_model();
+
+int init_lines(Lines3d &lines, size_t count);
+int init_cords(Cords3d &cords, size_t count);
+
 void free_model(Model &model);
-int init_result(DrawerResult &result, const Model &model);
-void free_result(DrawerResult &result);
+void free_cords(Cords3d &cords);
+void free_lines(Lines3d &lines);
+
+size_t get_size_cords(const Cords3d &cords);
+#endif

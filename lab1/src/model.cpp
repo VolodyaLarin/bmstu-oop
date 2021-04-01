@@ -5,64 +5,51 @@
 
 #include "drawer.hpp"
 
-int init_model(Model &model, size_t cords_count, size_t lines_count) {
-  Model model_temp;
+int init_lines(Lines3d &lines, size_t count){
+    auto *temp = (Line3d *)calloc(count, sizeof(Line3d));
+    if (!temp) return ERROR_ALLOC;
 
-  model_temp.loaded = true;
+    lines.array = temp;
+    lines.count = count;
 
-  model_temp.count_cords = cords_count;
-  model_temp.count_lines = lines_count;
+    return SUCCESS;
+}
+int init_cords(Cords3d &cords, size_t count){
+    auto *temp = (Cord3d *)calloc(count, sizeof(Cord3d));
+    if (!temp) return ERROR_ALLOC;
 
-  model_temp.center = {};
+    cords.array = temp;
+    cords.count = count;
 
-  model_temp.cords = (Cord3d *)calloc(cords_count, sizeof(*model_temp.cords));
-  model_temp.lines = (Line3d *)calloc(lines_count, sizeof(*model_temp.cords));
-
-  int err = SUCCESS;
-  if (!model_temp.cords || !model_temp.lines) {
-    err = ERROR_ALLOC;
-    free_model(model_temp);
-  }
-
-  if (!err) model = model_temp;
-  return err;
+    return SUCCESS;
 }
 
-int init_result(DrawerResult &result, const Model &model) {
-  DrawerResult temp;
+void free_cords(Cords3d &cords){
+    free(cords.array);
 
-  temp.loaded = true;
+    cords.array = nullptr;
+    cords.count = 0;
+}
 
-  temp.cords_count = model.count_cords;
-  temp.lines_count = model.count_lines;
+void free_lines(Lines3d &lines){
+    free(lines.array);
 
-  temp.cords = (Cord2d *)calloc(temp.cords_count, sizeof(*temp.cords));
-  temp.lines = (Line *)calloc(temp.lines_count, sizeof(*temp.lines));
-
-  int err = SUCCESS;
-  if (!temp.cords || !temp.lines) err = ERROR_ALLOC;
-
-  if (!err)
-    memcpy(temp.lines, model.lines, temp.lines_count * sizeof(*temp.lines));
-
-  if (!err)
-    result = temp;
-  else
-    free_result(temp);
-
-  return err;
+    lines.array = nullptr;
+    lines.count = 0;
 }
 
 void free_model(Model &model) {
-  model.loaded = false;
-
-  free(model.lines);
-  free(model.cords);
+  free_cords(model.cords);
+  free_lines(model.lines);
 }
 
-void free_result(DrawerResult &result) {
-  result.loaded = false;
 
-  free(result.lines);
-  free(result.cords);
+Model init_model(){
+    Model model {};
+    return model;
+}
+
+
+size_t get_size_cords(const Cords3d &cords){
+    return cords.count;
 }

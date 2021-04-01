@@ -3,35 +3,40 @@
 #include <cmath>
 
 #include "drawer.hpp"
+#include "translate.hpp"
 
 namespace drawer {
 
-int rotate_model(Model &data, const Cord3d &angles) {
-  int err = SUCCESS;
-  if (!data.loaded) err = ERROR_NOT_LOAD;
-  if (!err)
-    for (size_t i = 0; i < data.count_cords; i++) {
-      rotate_x_Cord3d(data.cords[i], data.center, angles.x);
-      rotate_y_Cord3d(data.cords[i], data.center, angles.y);
-      rotate_z_Cord3d(data.cords[i], data.center, angles.z);
+
+void rotate_cords(Cords3d &cords, const Cord3d &angles)
+{
+    for (size_t i = 0; i < cords.count; i++) {
+        rotate_x_Cord3d(cords.array[i], angles.x);
+        rotate_y_Cord3d(cords.array[i], angles.y);
+        rotate_z_Cord3d(cords.array[i], angles.z);
     }
-
-  return err;
+}
+void rotate_model(Model &data, const Cord3d &angles) {
+    translate_model_center(data);
+    rotate_cords(data.cords, angles);
+    translate_model_original(data);
 }
 
-void rotate_x_Cord3d(Cord3d &p, const Cord3d &c, double a) {
-  p.y = (p.y - c.y) * cos(a) - (p.z - c.z) * sin(a) + c.y;
-  p.z = (p.y - c.y) * sin(a) + (p.z - c.z) * cos(a) + c.z;
+
+
+void rotate_x_Cord3d(Cord3d &cord, double angle) {
+  cord.y = cord.y * cos(angle) - cord.z * sin(angle);
+  cord.z = cord.y * sin(angle) + cord.z * cos(angle);
 }
 
-void rotate_y_Cord3d(Cord3d &p, const Cord3d &c, double a) {
-  p.x = (p.x - c.x) * cos(a) - (p.z - c.z) * sin(a) + c.x;
-  p.z = (p.x - c.x) * sin(a) + (p.z - c.z) * cos(a) + c.z;
+void rotate_y_Cord3d(Cord3d &cord, double angle) {
+  cord.x = cord.x * cos(angle) - cord.z * sin(angle);
+  cord.z = cord.x * sin(angle) + cord.z * cos(angle);
 }
 
-void rotate_z_Cord3d(Cord3d &p, const Cord3d &c, double a) {
-  p.x = (p.x - c.x) * cos(a) - (p.y - c.y) * sin(a) + c.x;
-  p.y = (p.x - c.x) * sin(a) + (p.y - c.y) * cos(a) + c.y;
+void rotate_z_Cord3d(Cord3d &cord, double angle) {
+  cord.x = cord.x * cos(angle) - cord.y * sin(angle);
+  cord.y = cord.x * sin(angle) + cord.y * cos(angle);
 }
 
 }  // namespace drawer

@@ -1,13 +1,16 @@
-#pragma once
+#ifndef REQUEST_HPP_
+#define REQUEST_HPP_
 
-#include "drawer.hpp"
+
+
 
 struct ReadModelArgs {
   const char *filename;
 };
 
-struct ProjectArgs {
-  DrawerResult *result;
+#include "wrapper.hpp"
+struct DrawArgs {
+  CanvasWrapper canvas;
 };
 
 enum action_t {
@@ -16,8 +19,11 @@ enum action_t {
   action_scale,
   action_rotate,
   action_free_content,
-  action_project,
+  action_draw,
 };
+
+#include "drawer.hpp"
+
 
 struct Request {
   action_t action;
@@ -26,6 +32,8 @@ struct Request {
     Scale3d scale;
     Angles3d rotate;
     ReadModelArgs read_model;
-    ProjectArgs project;
+    DrawArgs draw_args;
   };
 };
+
+#endif
