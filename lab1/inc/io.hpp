@@ -1,7 +1,6 @@
 #ifndef IO_HPP_
 #define IO_HPP_
 
-
 #include "drawer.hpp"
 #include "request.hpp"
 

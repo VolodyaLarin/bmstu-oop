@@ -1,7 +1,6 @@
 #ifndef ROTATE_HPP_
 #define ROTATE_HPP_
 
-
 #include "drawer.hpp"
 
 namespace drawer {

@@ -1,9 +1,7 @@
 #ifndef MODEL_HPP_
 #define MODEL_HPP_
 
-
 #include "drawer.hpp"
-
 
 Model init_model();
 

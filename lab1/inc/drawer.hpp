@@ -25,8 +25,8 @@ struct Cord2d {
 };
 
 struct Line {
-    size_t start;
-    size_t end;
+  size_t start;
+  size_t end;
 };
 
 typedef Line Line3d, Line2d;
@@ -41,13 +41,13 @@ struct DrawerResult {
 };
 
 struct Cords3d {
-    Cord3d *array;
-    size_t count;
+  Cord3d *array;
+  size_t count;
 };
 
 struct Lines3d {
-    Line3d *array;
-    size_t count;
+  Line3d *array;
+  size_t count;
 };
 
 struct Model {

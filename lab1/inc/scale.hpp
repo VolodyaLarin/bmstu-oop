@@ -1,7 +1,6 @@
 #ifndef SCALE_HPP_
 #define SCALE_HPP_
 
-
 #include "drawer.hpp"
 
 namespace drawer {

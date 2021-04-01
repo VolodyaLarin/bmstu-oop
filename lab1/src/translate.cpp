@@ -6,14 +6,13 @@
 namespace drawer {
 
 void translate_model(Model &data, const Translate3d &translate) {
-    translate_Cord3d(data.center, translate);
-    translate_cords(data.cords, translate);
+  translate_Cord3d(data.center, translate);
+  translate_cords(data.cords, translate);
 }
 
-
 void translate_cords(Cords3d &cords, const Translate3d &translate) {
-    for (size_t i = 0; i < cords.count; i++)
-        translate_Cord3d(cords.array[i], translate);
+  for (size_t i = 0; i < cords.count; i++)
+    translate_Cord3d(cords.array[i], translate);
 }
 
 void translate_Cord3d(Cord3d &cord, const Translate3d &translate) {

@@ -5,37 +5,37 @@
 
 #include "drawer.hpp"
 
-int init_lines(Lines3d &lines, size_t count){
-    auto *temp = (Line3d *)calloc(count, sizeof(Line3d));
-    if (!temp) return ERROR_ALLOC;
+int init_lines(Lines3d &lines, size_t count) {
+  auto *temp = (Line3d *)calloc(count, sizeof(Line3d));
+  if (!temp) return ERROR_ALLOC;
 
-    lines.array = temp;
-    lines.count = count;
+  lines.array = temp;
+  lines.count = count;
 
-    return SUCCESS;
+  return SUCCESS;
 }
-int init_cords(Cords3d &cords, size_t count){
-    auto *temp = (Cord3d *)calloc(count, sizeof(Cord3d));
-    if (!temp) return ERROR_ALLOC;
+int init_cords(Cords3d &cords, size_t count) {
+  auto *temp = (Cord3d *)calloc(count, sizeof(Cord3d));
+  if (!temp) return ERROR_ALLOC;
 
-    cords.array = temp;
-    cords.count = count;
+  cords.array = temp;
+  cords.count = count;
 
-    return SUCCESS;
-}
-
-void free_cords(Cords3d &cords){
-    free(cords.array);
-
-    cords.array = nullptr;
-    cords.count = 0;
+  return SUCCESS;
 }
 
-void free_lines(Lines3d &lines){
-    free(lines.array);
+void free_cords(Cords3d &cords) {
+  free(cords.array);
 
-    lines.array = nullptr;
-    lines.count = 0;
+  cords.array = nullptr;
+  cords.count = 0;
+}
+
+void free_lines(Lines3d &lines) {
+  free(lines.array);
+
+  lines.array = nullptr;
+  lines.count = 0;
 }
 
 void free_model(Model &model) {
@@ -43,13 +43,9 @@ void free_model(Model &model) {
   free_lines(model.lines);
 }
 
-
-Model init_model(){
-    Model model {};
-    return model;
+Model init_model() {
+  Model model{};
+  return model;
 }
 
-
-size_t get_size_cords(const Cords3d &cords){
-    return cords.count;
-}
+size_t get_size_cords(const Cords3d &cords) { return cords.count; }

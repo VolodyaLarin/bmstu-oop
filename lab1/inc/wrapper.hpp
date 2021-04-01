@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 struct CanvasWrapper {
-    sf::RenderWindow *window;
+  sf::RenderWindow *window;
 };
 
 #endif

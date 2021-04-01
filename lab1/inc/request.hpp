@@ -1,9 +1,6 @@
 #ifndef REQUEST_HPP_
 #define REQUEST_HPP_
 
-
-
-
 struct ReadModelArgs {
   const char *filename;
 };
@@ -23,7 +20,6 @@ enum action_t {
 };
 
 #include "drawer.hpp"
-
 
 struct Request {
   action_t action;
