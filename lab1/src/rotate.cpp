@@ -14,10 +14,14 @@ void rotate_cords(Cords3d &cords, const Cord3d &angles) {
     rotate_z_Cord3d(cords.array[i], angles.z);
   }
 }
-void rotate_model(Model &data, const Cord3d &angles) {
+int rotate_model(Model &data, const Cord3d &angles) {
+  if (!data.loaded) return ERROR_NOT_LOAD;
+
   translate_model_center(data);
   rotate_cords(data.cords, angles);
   translate_model_original(data);
+
+  return SUCCESS;
 }
 
 void rotate_x_Cord3d(Cord3d &cord, double angle) {

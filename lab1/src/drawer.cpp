@@ -22,13 +22,13 @@ int drawer(Request &request) {
       err = read_model(data, request.read_model);
       break;
     case action_rotate:
-      rotate_model(data, request.rotate);
+      err = rotate_model(data, request.rotate);
       break;
     case action_translate:
-      translate_model(data, request.translate);
+      err = translate_model(data, request.translate);
       break;
     case action_scale:
-      scale_model(data, request.scale);
+      err = scale_model(data, request.scale);
       break;
     case action_free_content:
       free_model(data);

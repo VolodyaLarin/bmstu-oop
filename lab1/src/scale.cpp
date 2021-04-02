@@ -10,14 +10,18 @@ void scale_cords(Cords3d &cords, const Cord3d &center, const Cord3d &k) {
     scale_Cord3d(cords.array[i], center, k);
 }
 
-void scale_model(Model &data, const Cord3d &k) {
+int scale_model(Model &data, const Cord3d &k) {
+  if (data.loaded) return ERROR_NOT_LOAD;
+
   scale_cords(data.cords, data.center, k);
+
+  return SUCCESS;
 }
 
-void scale_Cord3d(Cord3d &p, const Cord3d &c, const Cord3d &k) {
-  p.x = k.x * (p.x - c.x) + c.x;
-  p.y = k.y * (p.y - c.y) + c.y;
-  p.z = k.z * (p.z - c.z) + c.z;
+void scale_Cord3d(Cord3d &point, const Cord3d &center, const Cord3d &k) {
+  point.x = k.x * (point.x - center.x) + center.x;
+  point.y = k.y * (point.y - center.y) + center.y;
+  point.z = k.z * (point.z - center.z) + center.z;
 }
 
 }  // namespace drawer

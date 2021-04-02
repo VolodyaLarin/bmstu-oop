@@ -51,6 +51,7 @@ struct Lines3d {
 };
 
 struct Model {
+  bool loaded;
   Cord3d center;
   Cords3d cords;
   Lines3d lines;

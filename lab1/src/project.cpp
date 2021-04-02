@@ -19,22 +19,27 @@ int draw_lines(CanvasWrapper &canvas, const Lines3d &lines,
   Cord3d cords_line3d[2] = {};
   Cord2d cords_line2d[2] = {};
 
-  for (size_t i = 0; i < lines.count; i++) {
+  int err = SUCCESS;
+
+  for (size_t i = 0; !err && i < lines.count; i++) {
     getLineCords(cords_line3d, lines.array[i], cords);
     project_2cord(cords_line2d, cords_line3d);
-    draw_line_wrapper(canvas, cords_line2d);
+    err = draw_line_wrapper(canvas, cords_line2d);
   }
 
-  return SUCCESS;
+  return err;
 }
 
 int draw_line_wrapper(CanvasWrapper &canvas, Cord2d proj[2]) {
-  sf::Vertex line[] = {
-      sf::Vertex(sf::Vector2f(proj[0].x, proj[0].y)),
-      sf::Vertex(sf::Vector2f(proj[1].x, proj[1].y)),
-  };
-
-  canvas.window->draw(line, 2, sf::Lines);
+  try {
+    sf::Vertex line[] = {
+        sf::Vertex(sf::Vector2f(proj[0].x, proj[0].y)),
+        sf::Vertex(sf::Vector2f(proj[1].x, proj[1].y)),
+    };
+    canvas.window->draw(line, 2, sf::Lines);
+  } catch (const std::exception &e) {
+    return EXIT_FAILURE;
+  }
 
   return SUCCESS;
 }

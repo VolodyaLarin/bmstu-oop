@@ -5,8 +5,8 @@
 
 Model init_model();
 
-int init_lines(Lines3d &lines, size_t count);
-int init_cords(Cords3d &cords, size_t count);
+int alloc_lines(Lines3d &lines, size_t count);
+int alloc_cords(Cords3d &cords, size_t count);
 
 void free_model(Model &model);
 void free_cords(Cords3d &cords);

@@ -5,7 +5,7 @@
 
 #include "drawer.hpp"
 
-int init_lines(Lines3d &lines, size_t count) {
+int alloc_lines(Lines3d &lines, size_t count) {
   auto *temp = (Line3d *)calloc(count, sizeof(Line3d));
   if (!temp) return ERROR_ALLOC;
 
@@ -14,7 +14,7 @@ int init_lines(Lines3d &lines, size_t count) {
 
   return SUCCESS;
 }
-int init_cords(Cords3d &cords, size_t count) {
+int alloc_cords(Cords3d &cords, size_t count) {
   auto *temp = (Cord3d *)calloc(count, sizeof(Cord3d));
   if (!temp) return ERROR_ALLOC;
 
@@ -39,6 +39,8 @@ void free_lines(Lines3d &lines) {
 }
 
 void free_model(Model &model) {
+  model.loaded = false;
+
   free_cords(model.cords);
   free_lines(model.lines);
 }

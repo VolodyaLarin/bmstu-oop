@@ -24,54 +24,51 @@ int read_model_from_stream(Model &model, FILE *file) {
   Model temp = init_model();
 
   int err = read_Cord3d(temp.center, file);
+  if (err) return err;
 
-  if (!err) err = read_Cords(temp.cords, file);
+  err = read_Cords(temp.cords, file);
+  if (err) return err;
 
   size_t cords_count = get_size_cords(temp.cords);
-
-  if (!err) err = read_Lines(temp.lines, file, cords_count);
-
+  err = read_Lines(temp.lines, file, cords_count);
   if (err) {
-    free_model(temp);
-  } else {
-    free_model(model);
-    model = temp;
+    free_cords(temp.cords);
+    return err;
   }
-  return err;
+
+  free_model(model);
+  model = temp;
+  model.loaded = true;
+
+  return SUCCESS;
 }
 
 int read_size(size_t &size, FILE *file) {
-  int err = SUCCESS;
+  if (!file) return ERROR_PTR;
 
-  if (!file) {
-    err = ERROR_PTR;
-  } else {
-    long long temp_size = 0;
-    if (fscanf(file, "%lld", &temp_size) != 1 || temp_size <= 0)
-      err = ERROR_IO;
-    else
-      size = temp_size;
-  }
+  long long temp_size = 0;
+  if (fscanf(file, "%lld", &temp_size) != 1 || temp_size <= 0) return ERROR_IO;
 
-  return err;
+  size = temp_size;
+
+  return SUCCESS;
 }
 
 int read_Lines(Lines3d &lines, FILE *file, size_t cords_count) {
   size_t size = 0;
   int err = read_size(size, file);
   Lines3d temp_lines = {};
-  if (!err) err = init_lines(temp_lines, size);
+  if (!err) err = alloc_lines(temp_lines, size);
 
-  for (size_t i = 0; !err && i < size; ++i) {
+  for (size_t i = 0; !err && i < size; ++i)
     err = read_Line3d(temp_lines.array[i], file, cords_count);
-  }
 
   if (err) {
     free_lines(temp_lines);
-  } else {
-    free_lines(lines);
-    lines = temp_lines;
+    return err;
   }
+
+  lines = temp_lines;
 
   return err;
 }
@@ -79,20 +76,22 @@ int read_Lines(Lines3d &lines, FILE *file, size_t cords_count) {
 int read_Cords(Cords3d &cords, FILE *file) {
   size_t size = 0;
   int err = read_size(size, file);
+  if (err) return err;
+
   Cords3d temp_cords = {};
-  if (!err) err = init_cords(temp_cords, size);
+  if (!err) err = alloc_cords(temp_cords, size);
 
   for (size_t i = 0; !err && i < size; ++i)
     err = read_Cord3d(temp_cords.array[i], file);
 
   if (err) {
     free_cords(temp_cords);
-  } else {
-    free_cords(cords);
-    cords = temp_cords;
+    return err;
   }
 
-  return err;
+  cords = temp_cords;
+
+  return SUCCESS;
 }
 
 int read_Line3d(Line3d &line, FILE *file, size_t cords_count) {

@@ -5,7 +5,7 @@
 
 namespace drawer {
 
-void rotate_model(Model &data, const Angles3d &angles);
+int rotate_model(Model &data, const Angles3d &angles);
 
 void rotate_x_Cord3d(Cord3d &cord, double angle);
 void rotate_y_Cord3d(Cord3d &cord, double angle);

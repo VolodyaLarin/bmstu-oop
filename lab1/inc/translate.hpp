@@ -5,7 +5,7 @@
 
 namespace drawer {
 
-void translate_model(Model &data, const Translate3d &d);
+int translate_model(Model &data, const Translate3d &d);
 void translate_Cord3d(Cord3d &p, const Translate3d &d);
 
 void translate_cords(Cords3d &cords, const Translate3d &translate);
