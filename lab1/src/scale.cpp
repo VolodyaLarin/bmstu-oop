@@ -11,7 +11,7 @@ void scale_cords(Cords3d &cords, const Cord3d &center, const Cord3d &k) {
 }
 
 int scale_model(Model &data, const Cord3d &k) {
-  if (data.loaded) return ERROR_NOT_LOAD;
+  if (!data.loaded) return ERROR_NOT_LOAD;
 
   scale_cords(data.cords, data.center, k);
 
